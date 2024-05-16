@@ -1,0 +1,36 @@
+{
+  "name": "random-images",
+  "version": "1.0.0",
+  "description": "生成随机图片",
+  "main": "src/main/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "electron .",
+    "electron:generate-icons": "electron-icon-builder --input=./resources/icon.png --output=build --flatten",
+    "build:win": "electron-builder --win --x64",
+    "build:mac": "electron-builder --mac"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "axios": "^1.6.8",
+    "electron": "^30.0.4",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.random-imgages.sun",
+    "productName": "随机图片",
+    "directories": {
+      "output": "dist"
+    },
+    "asar": true,
+    "win": {
+      "icon": "./build/icons/icon.ico",
+      "target": [
+        "nsis",
+        "zip"
+      ]
+    }
+  }
+}

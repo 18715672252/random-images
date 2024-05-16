@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            padding: 10px;
+            font-size: 12px;
+
+        }
+        .main {
+            font-weight: 700;
+            display: flex;
+            flex-wrap: wrap;
+            
+            justify-content: space-between;
+        }
+        .main > div {
+            width: 48%;
+            display: flex;
+            /* flex-wrap: wrap; */
+            align-items: center;
+        }
+        .main > div > span {
+            width: 70px;
+        }
+        input {
+            padding: 3px 0 3px 10px;
+            outline: none;
+            width: calc(100% - 70px);
+        }
+        li {
+            list-style: none;
+            padding: 3px 5px;
+            /* background-color: #1f883d; */
+            background-color: #999;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .format {
+            display: flex;
+            align-items: center;
+            margin-top: 15px;
+        }
+        ul {
+            display: flex;
+        }
+        ul > li:nth-child(n + 2) {
+            margin-left: 10px;
+        }
+        .current-format {
+            background-color: #0969da;
+        }
+        .download {
+            margin-left: 20px;
+            padding: 5px 10px;
+            background-color: #0969da;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #dialog {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            top: 0;
+            left: 0;
+        }
+        .message {
+            padding: 5px 10px;
+            background-color: #0969da;
+            border-radius: 5px;
+            animation: show 1s;
+        }
+        @keyframes show {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <!-- <a href="https://fastly.picsum.photos/id/390/500/500.jpg?hmac=yf0mTyMzlJseuGeg6Snlp-y2bjeyupnHqxGYqG387hs" download>下载</a> -->
+        <div>
+            <span>图片的宽：</span>
+            <input type="text" value="500" id="inpW">
+        </div>
+        <div>
+            <span>图片的高：</span>
+            <input type="text" value="500" id="inpH">
+        </div>
+    </div>
+    <div class="format">
+        <span>格式：</span>
+        <ul id="format-ul">
+            <li class="current-format" onclick="selImgFormat(event)" data-format="JPG">JPG</li>
+            <li onclick="selImgFormat(event)" data-format="PNG">PNG</li>
+        </ul>
+        <div class="download" onclick="downloadImg()">下载到桌面</div>
+        <div class="download">最小化</div>
+        <div class="download">关闭</div>
+    </div>
+</body>
+<script>
+    const formatDom = document.querySelectorAll('#format-ul>li')
+    const inpWNode = document.getElementById('inpW'), inpHNode = document.getElementById('inpH')
+    const dialog = document.getElementById('dialog')
+    let hideModal = null
+    window.electronAPI.ipcRendererEvent('img-download-finsh', () => {
+        hideModal && hideModal("下载成功")
+    })
+    window.electronAPI.ipcRendererEvent('img-download-error', () => {
+        hideModal && hideModal("下载失败，请重新下载")
+    })
+    function selImgFormat (event) {
+        console.log(window)
+        window.electronAPI.invoke('format-change', event.target.getAttribute('data-format'))
+        formatDom.forEach(node => {
+            if (event.target !== node) {
+                node.classList = []
+            } else {
+                node.classList = ['current-format']
+            }
+        })
+    }
+
+    function downloadImg () {
+        const inpW = inpWNode.value, inpH = inpHNode.value
+        if (!inpW || !inpH) {
+            showModal({ messaeg: '请输入宽高' })
+            return false
+        }
+        if (isNaN(+inpW) || isNaN(+inpH)) {
+            showModal({ messaeg: '宽高需是正整数' })
+            return false
+        }
+        hideModal = showModal({ messaeg: '正在下在请稍后...', autoHidden: true })
+        window.electronAPI.invoke('download-img', { w: inpW, h: inpH })
+    }
+
+    function showModal (options = {}) {
+        const openNode = document.createElement('div')
+        openNode.setAttribute('id', 'dialog')
+        const div = `<div id="message" class="message">${options.messaeg || "请输入内容"}</div>`
+        openNode.innerHTML = div
+        document.body.appendChild(openNode)
+        if (options.autoHidden) {
+            return (msg) => {
+                if (msg) {
+                    openNode.querySelector('#message').innerHTML = msg
+                    setTimeout(() => {
+                        openNode.parentNode.removeChild(openNode)
+                        openNode = null
+                    }, 1000)
+                } else {
+                    openNode.parentNode.removeChild(openNode)
+                    openNode = null
+                }
+                
+            }
+        } else {
+            setTimeout(() => {
+                openNode.parentNode.removeChild(openNode)
+            }, 3000)
+        }
+        
+    }
+
+
+</script>
+</html>
