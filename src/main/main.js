@@ -21,6 +21,7 @@ const createWindow = () => {
         y: 0,
         frame: false,
         icon,
+        resizable: false,
         alwaysOnTop: true,
         webPreferences: {
             preload: path.join(__dirname, '../preload/preload.js')

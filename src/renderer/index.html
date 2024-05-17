@@ -9,16 +9,20 @@
             margin: 0;
             padding: 0;
         }
+        html {
+            height: 100%;
+        }
         body {
-            padding: 10px;
+            padding: 10px 10px 0 10px;
             font-size: 12px;
-
+            box-sizing: border-box;
+            height: 100%;
         }
         .main {
             font-weight: 700;
             display: flex;
             flex-wrap: wrap;
-            
+            -webkit-app-region: drag;
             justify-content: space-between;
         }
         .main > div {
@@ -47,7 +51,11 @@
         .format {
             display: flex;
             align-items: center;
-            margin-top: 15px;
+            
+        }
+        .drag {
+            -webkit-app-region: drag;
+            height: 15px;
         }
         ul {
             display: flex;
@@ -97,25 +105,27 @@
 <body>
     <div class="main">
         <!-- <a href="https://fastly.picsum.photos/id/390/500/500.jpg?hmac=yf0mTyMzlJseuGeg6Snlp-y2bjeyupnHqxGYqG387hs" download>下载</a> -->
-        <div>
+        <div class="on-drag">
             <span>图片的宽：</span>
             <input type="text" value="500" id="inpW">
         </div>
-        <div>
+        <div class="on-drag">
             <span>图片的高：</span>
             <input type="text" value="500" id="inpH">
         </div>
     </div>
+    <div class="drag"></div>
     <div class="format">
         <span>格式：</span>
-        <ul id="format-ul">
+        <ul id="format-ul on-drag">
             <li class="current-format" onclick="selImgFormat(event)" data-format="JPG">JPG</li>
             <li onclick="selImgFormat(event)" data-format="PNG">PNG</li>
         </ul>
-        <div class="download" onclick="downloadImg()">下载到桌面</div>
-        <div class="download" onclick="minimize()">最小化</div>
-        <div class="download" onclick="closeapp()">关闭</div>
+        <div class="download on-drag" onclick="downloadImg()">下载到桌面</div>
+        <div class="download on-drag" onclick="minimize()">最小化</div>
+        <div class="download on-drag" onclick="closeapp()">关闭</div>
     </div>
+    <div class="drag"></div>
 </body>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
