@@ -14,7 +14,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "axios": "^1.6.8",
     "electron": "^30.0.4",
     "electron-builder": "^24.13.3"
   },
@@ -28,9 +27,14 @@
     "win": {
       "icon": "./build/icons/icon.ico",
       "target": [
-        "nsis",
-        "zip"
+        "nsis"
       ]
     }
+  },
+  "dependencies": {
+    "@electron-toolkit/utils": "^3.0.0",
+    "axios": "^1.6.8",
+    "electron-is-dev": "^3.0.1",
+    "form-data": "^4.0.0"
   }
 }

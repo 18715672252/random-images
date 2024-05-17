@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title></title>
     <style>
         * {
             margin: 0;
@@ -113,10 +113,11 @@
             <li onclick="selImgFormat(event)" data-format="PNG">PNG</li>
         </ul>
         <div class="download" onclick="downloadImg()">下载到桌面</div>
-        <div class="download">最小化</div>
-        <div class="download">关闭</div>
+        <div class="download" onclick="minimize()">最小化</div>
+        <div class="download" onclick="closeapp()">关闭</div>
     </div>
 </body>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
     const formatDom = document.querySelectorAll('#format-ul>li')
     const inpWNode = document.getElementById('inpW'), inpHNode = document.getElementById('inpH')
@@ -128,8 +129,13 @@
     window.electronAPI.ipcRendererEvent('img-download-error', () => {
         hideModal && hideModal("下载失败，请重新下载")
     })
+    function minimize () {
+        window.electronAPI.invoke('minimize-window')
+    }
+    function closeapp () {
+        window.electronAPI.invoke('close-app')
+    }
     function selImgFormat (event) {
-        console.log(window)
         window.electronAPI.invoke('format-change', event.target.getAttribute('data-format'))
         formatDom.forEach(node => {
             if (event.target !== node) {
@@ -140,7 +146,7 @@
         })
     }
 
-    function downloadImg () {
+    async function downloadImg () {
         const inpW = inpWNode.value, inpH = inpHNode.value
         if (!inpW || !inpH) {
             showModal({ messaeg: '请输入宽高' })
@@ -151,7 +157,8 @@
             return false
         }
         hideModal = showModal({ messaeg: '正在下在请稍后...', autoHidden: true })
-        window.electronAPI.invoke('download-img', { w: inpW, h: inpH })
+        const res = await axios.get(`https://picsum.photos/${inpW}/${inpH}`)
+        window.electronAPI.invoke('download-img', res.request.responseURL)
     }
 
     function showModal (options = {}) {

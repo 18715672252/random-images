@@ -6,8 +6,7 @@ const JSBridge = {
     },
     ipcRendererEvent(event, callback) {
         ipcRenderer.on(event, callback)
-    },
-    
+    }
 }
 
 
