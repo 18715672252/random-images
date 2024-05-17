@@ -1,7 +1,7 @@
 const { ipcMain, app, net, Notification, BrowserWindow, nativeImage } = require('electron')
 const fs = require('fs')
 const path = require('path')
-const icon = nativeImage.createFromPath(path.resolve(__dirname, '../../build/icons/512x512.png'))
+const icon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/512x512.png'))
 // const axios = require('axios')
 let ext = 'JPG'
 let notice = null
