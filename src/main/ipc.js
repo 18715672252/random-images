@@ -6,13 +6,12 @@ const icon = nativeImage.createFromPath(path.resolve(__dirname, '../../build/ico
 let ext = 'JPG'
 let notice = null
 // const xhr = new XMLHttpRequest()
-ipcMain.handle('format-change', (event, data) => {
+ipcMain.handle('format-change', (_event, data) => {
     ext = data
 })
 
 
 ipcMain.handle('download-img', async (event, data) => {
-    const { w, h } = data
     const time = Date.now()
     const path = app.getPath('desktop')
     try {
