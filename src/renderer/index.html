@@ -22,7 +22,6 @@
             font-weight: 700;
             display: flex;
             flex-wrap: wrap;
-            -webkit-app-region: drag;
             justify-content: space-between;
         }
         .main > div {
@@ -117,15 +116,15 @@
     <div class="drag"></div>
     <div class="format">
         <span>格式：</span>
-        <ul id="format-ul on-drag">
+        <ul id="format-ul">
             <li class="current-format" onclick="selImgFormat(event)" data-format="JPG">JPG</li>
             <li onclick="selImgFormat(event)" data-format="PNG">PNG</li>
         </ul>
-        <div class="download on-drag" onclick="downloadImg()">下载到桌面</div>
-        <div class="download on-drag" onclick="minimize()">最小化</div>
-        <div class="download on-drag" onclick="closeapp()">关闭</div>
+        <div class="download" onclick="downloadImg()">下载到桌面</div>
+        <div class="download" onclick="minimize()">最小化</div>
+        <div class="download" onclick="closeapp()">关闭</div>
     </div>
-    <div class="drag"></div>
+    <div class="drag" style="height: 10px;"></div>
 </body>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
@@ -133,6 +132,9 @@
     const inpWNode = document.getElementById('inpW'), inpHNode = document.getElementById('inpH')
     const dialog = document.getElementById('dialog')
     let hideModal = null
+    document.body.ondblclick = (event) => {
+        event.preventDefault()
+    }
     window.electronAPI.ipcRendererEvent('img-download-finsh', () => {
         hideModal && hideModal("下载成功")
     })

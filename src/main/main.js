@@ -28,6 +28,8 @@ const createWindow = () => {
         }
     })
     win.loadFile(path.resolve(__dirname, '../renderer/index.html'))
+    // 设置窗口是否可以由用户手动最大化。
+    win.setMaximizable(false)
 }
 
 app.whenReady().then(() => {
