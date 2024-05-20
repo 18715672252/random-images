@@ -36,7 +36,7 @@ ipcMain.handle('download-img', async (event, data) => {
             })
         })
         request.end()
-        return 123
+        return undefined
     } catch (error) {
         event.sender.send('img-download-error')
         console.log(error)

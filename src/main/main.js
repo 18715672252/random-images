@@ -1,5 +1,5 @@
 // import isDev from " "
-const { app, BrowserWindow, screen, nativeImage, Tray, Menu } = require('electron')
+const { app, BrowserWindow, screen, nativeImage, Menu } = require('electron')
 const { is } = require('@electron-toolkit/utils')
 const path = require('path')
 const { setPosition } = require('./utils.js')
@@ -14,6 +14,7 @@ if (is.dev) {
     app.setAppUserModelId("com.random-imgages.sun")
 }
 const createTray = () => {
+    const { Tray } = require('electron')
     const tray = new Tray(icon)
     const contextMenu = Menu.buildFromTemplate([
         { label: '定位到左上角', click: () => { setPosition('left-top', win) }},
